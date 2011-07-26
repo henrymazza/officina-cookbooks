@@ -21,3 +21,7 @@ template "/tmp/chef-getting-started.txt" do
   source "chef-getting-started.txt.erb"
   mode "0644"
 end
+
+rvm_ruby "ruby-1.9.2" do
+  action :install
+end
