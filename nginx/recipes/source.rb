@@ -70,6 +70,14 @@ directory node[:nginx][:log_dir] do
   action :create
 end
 
+template "nginx.conf" do
+  path "#{node[:nginx][:dir]}/nginx.conf"
+  source "nginx.conf.erb"
+  owner "root"
+  group "root"
+  mode 0644
+end
+
 directory node[:nginx][:dir] do
   owner "root"
   group "root"

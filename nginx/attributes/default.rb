@@ -1,15 +1,17 @@
-default[:nginx][:version]      = "0.8.54"
+default[:nginx][:version]      = "1.0.4"
 
 case platform
 when "debian","ubuntu"
   set[:nginx][:dir]     = "/etc/nginx"
   set[:nginx][:log_dir] = "/var/log/nginx"
   set[:nginx][:user]    = "www-data"
+  set[:nginx][:group]   = "www-data"
   set[:nginx][:binary]  = "/usr/sbin/nginx"
 else
   set[:nginx][:dir]     = "/etc/nginx"
   set[:nginx][:log_dir] = "/var/log/nginx"
   set[:nginx][:user]    = "www-data"
+  set[:nginx][:group]   = "www-data"
   set[:nginx][:binary]  = "/usr/sbin/nginx"
 end
 
@@ -33,3 +35,6 @@ default[:nginx][:keepalive_timeout]  = 65
 default[:nginx][:worker_processes]   = cpu[:total]
 default[:nginx][:worker_connections] = 2048
 default[:nginx][:server_names_hash_bucket_size] = 64
+
+default[:nginx][:passenger_flags] = '--with-ipv6 --with-http_stub_status_module --with-http_ssl_module'
+
