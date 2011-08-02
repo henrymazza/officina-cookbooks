@@ -83,10 +83,6 @@ template "#{node[:nginx][:dir]}/sites-available/default" do
   mode 0644
 end
 
-nginx_site "default" do
-  not_if "test -e /etc/nginx/sites-enabled/000-default"
-end
-
 %w{nxensite nxdissite}.each do |nxscript|
   template "/usr/sbin/#{nxscript}" do
     source "#{nxscript}.erb"
@@ -113,6 +109,8 @@ template "nginx.conf" do
   notifies :restart, resources(:service => "nginx")
 end
 
+nginx_site "default" 
+
 directory "/var/www/nginx-default" do
   owner node[:nginx][:user]
   recursive true
@@ -121,5 +119,4 @@ end
 template "/var/www/nginx-default/index.html" do
   owner node[:nginx][:user]
   source "index.html.erb"
-  notifies :restart, resources(:service => "nginx")
 end
