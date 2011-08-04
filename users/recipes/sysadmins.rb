@@ -62,7 +62,9 @@ search(:users, 'groups:sysadmin') do |u|
     variables :ssh_keys => u['ssh_keys']
   end
 
+  package "vim"
   package "screen"
+  package "htop"
 
   template "#{home_dir}/.screenrc" do
     source "screenrc"

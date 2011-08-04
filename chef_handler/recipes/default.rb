@@ -29,3 +29,8 @@ remote_directory node['chef_handler']['handler_path'] do
   action :nothing
 end.run_action(:create)
 
+%w(pony chef-handler-updated-resources).each do |gem|
+  gem_package gem 
+end
+
+

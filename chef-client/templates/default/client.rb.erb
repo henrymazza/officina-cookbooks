@@ -34,3 +34,12 @@ ENV['HTTP_PROXY'] = "<%= node["chef_client"]["http_proxy"] %>"
 
 Ohai::Config[:plugin_path] << "<%= node["ohai"]["plugin_path"] %>"
 <% end -%>
+
+# /etc/chef/client.rb
+require "/var/chef/handlers/email_me"
+require "chef/handler/updated_resources" 
+
+email_handler = Officina::EmailMe.new "chef@<%= node[:domain] %>", "fabio.mazarotto@me.com"
+
+report_handlers << SimpleReport::UpdatedResources.new
+exception_handlers << email_handler
