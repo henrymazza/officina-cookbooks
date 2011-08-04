@@ -61,9 +61,27 @@ search(:users, 'groups:sysadmin') do |u|
     mode "0600"
     variables :ssh_keys => u['ssh_keys']
   end
+
+  package "screen"
+
+  template "#{home_dir}/.screenrc" do
+    source "screenrc"
+    owner u['id']
+    group u['gid'] || u['id']
+    mode "0600"
+  end
+  
+  template "#{home_dir}/.bashrc" do
+    source "bashrc"
+    owner u['id']
+    group u['gid'] || u['id']
+    mode "0600"
+  end
 end
 
 group "sysadmin" do
   gid 2300
   members sysadmin_group
 end
+
+
