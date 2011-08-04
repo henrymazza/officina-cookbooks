@@ -1,5 +1,5 @@
 
-node[:node_hostname] = "ubuntu666.officina.me"
+node[:node_hostname] = node.name
 node[:short_hostname] = node[:node_hostname].split('.').first
 
 
