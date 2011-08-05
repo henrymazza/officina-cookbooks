@@ -1,6 +1,6 @@
 server {
   listen   80;
-  server_name  <%= node[:ipaddress] %> officina.me;
+  server_name  <%= node[:ipaddress] %> <%= node[:domain] %>;
 
   access_log  <%= node[:nginx][:log_dir] %>/localhost.access.log;
 

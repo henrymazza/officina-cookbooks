@@ -46,5 +46,9 @@ template "/etc/network/if-pre-up.d/iptables_load" do
   variables :iptables_save_file => iptables_save_file
 end
 
+iptables_rule "basic_rules" do
+  enable false
+end
 iptables_rule "all_established"
 iptables_rule "all_icmp"
+iptables_rule "all_ssh"
