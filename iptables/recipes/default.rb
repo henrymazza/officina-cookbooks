@@ -49,6 +49,7 @@ end
 iptables_rule "basic_rules" do
   enable false
 end
+iptables_rule "basic_policy"
 iptables_rule "all_established"
 iptables_rule "all_icmp"
 iptables_rule "all_ssh"
