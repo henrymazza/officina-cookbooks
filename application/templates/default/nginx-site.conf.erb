@@ -1,0 +1,53 @@
+server {
+  listen   80;
+  server_name <%= @domains.join(' ') %> <%= @domains.map {|d| "~^static\d.#{d}?$"}.join ' ' %> <%= @id %>.<%= node[:domain] %>;
+
+  gzip on;
+
+  location ~* \.(js|swf|css|png|je?pg)$ {
+    if ($query_string ~ "^[0-9]+$") {
+      expires max;
+      break;
+    }
+  }
+  location ~ ^/assets/ {
+    passenger_enabled on;
+    expires max;
+  }
+  root <%= @deploy_to %>/current/public;
+  passenger_enabled on;
+  passenger_min_instances 1;
+}
+
+<% if @ssl_certificate %>
+server {
+  listen   443 default ssl;
+  server_name <%= @ssl_domains.join(' ') %> <%= @ssl_domains.map {|d| "~^static\d.#{d}?$"}.join ' ' %>;
+
+  ssl_session_cache    shared:SSL:10m;
+  ssl                  on;
+  ssl_certificate_key @ssl_certificate_key;
+  ssl_certificate @ssl_certificate;
+
+  keepalive_timeout   10; 
+  send_timeout      12; 
+  sendfile        on; 
+  tcp_nodelay        on; 
+
+  gzip on;
+
+  root /home/user/app/mantostore.com/current/public;
+  passenger_enabled on;
+  passenger_min_instances 1;
+
+  if ($request_method != GET) {
+    break;
+  }
+  if (-f $document_root/cache$uri) {
+    rewrite (.*) /cache$1 break;
+  }
+}
+<% end %>
+
+passenger_pre_start http://<%= @domains.first %>/;
+passenger_pre_start https://<%= @ssl_domains.first %>/;

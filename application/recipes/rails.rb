@@ -46,8 +46,23 @@ if app['gems']
     gem_package gem do
       action :install
       version ver if ver && ver.length > 0
+      gem_binary   "/usr/local/rvm/bin/rvm #{app['rvm_ruby']} gem"
     end
   end
+end
+
+# Create the user and group if doesn't exists
+user app['owner'] do
+  home "/home/#{app['owner']}"
+  shell '/bin/bash'
+end
+group app['group'] do
+  members [app['owner']]
+  append true
+end
+directory "/home/#{app['owner']}" do
+  owner app['owner']
+  group app['group']
 end
 
 directory app['deploy_to'] do
@@ -168,8 +183,8 @@ deploy_revision app['id'] do
         to "#{app['deploy_to']}/shared/vendor_bundle"
       end
       common_groups = %w{development test cucumber staging production}
-      execute "bundle install --deployment --without #{(common_groups -([node.chef_environment])).join(' ')}" do
-        ignore_failure true
+      execute "/usr/local/rvm/bin/rvm #{app['rvm_ruby']} exec bundle install --deployment" do
+        ignore_failure false
         cwd release_path
       end
     elsif app['gems'].has_key?('bundler08')
@@ -214,3 +229,13 @@ deploy_revision app['id'] do
     end
   end
 end
+
+template "#{node[:nginx][:dir]}/sites-available/#{app['id']}" do
+  source "nginx-site.conf.erb"
+  owner node[:nginx][:user]
+  group node[:nginx][:group]
+  mode "0600"
+  variables app.to_hash
+end
+
+nginx_site app['id'] 
