@@ -1,0 +1,29 @@
+# TODO: make a separete recipe for this!
+server {
+  listen   80;
+  server_name  panel.officina.me;
+
+  root   /home/user/panel/;
+
+  location / {
+    index  index.php index.html;
+
+# this serves static files that exist without running other rewrite tests
+    if (-f $request_filename) {
+      expires 30d;
+      break;
+    }
+
+# this sends all non-existing file or directory requests to index.php
+    if (!-e $request_filename) {
+      rewrite ^(.+)$ /index.php?q=$1 last;
+    }
+  }
+
+  location ~ .*.php$ {
+    fastcgi_pass   127.0.0.1:49232; #this must point to the socket spawn_fcgi is running on.
+    fastcgi_param  SCRIPT_FILENAME  /home/user/panel$fastcgi_script_name;
+    fastcgi_index  index.php;
+    include /etc/nginx/fastcgi_params;
+  }
+}
