@@ -14,6 +14,7 @@ end
   end
 end
 
+node.set[:nginx][:daemon_disable]  = true
 node.default[:nginx][:passenger_root] = `/usr/local/rvm/bin/rvm default exec passenger-config --root` 
 
 # override default attributes for the binary
@@ -100,9 +101,9 @@ cookbook_file "#{node[:nginx][:dir]}/mime.types" do
   notifies :restart, resources(:service => "nginx")
 end
 
-template "nginx.conf" do
+template "nginx-passenger.conf" do
   path "#{node[:nginx][:dir]}/nginx.conf"
-  source "nginx.conf.erb"
+  source "nginx-passenger.conf.erb"
   owner "root"
   group "root"
   mode "0644"
