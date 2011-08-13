@@ -15,6 +15,6 @@ recipe "database::snapshot", "Locks tables and freezes XFS filesystem for replic
   supports os
 end
 
-%w{ mysql aws xfs }.each do |cb|
+%w{ mysql }.each do |cb|
   depends cb
 end

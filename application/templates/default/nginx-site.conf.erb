@@ -1,6 +1,6 @@
 server {
   listen   80;
-  server_name <%= @domains.join(' ') %> <%= @domains.map {|d| "~^static\d.#{d}?$"}.join ' ' %> <%= @id %>.<%= node[:domain] %>;
+  server_name <%= @id %>.officina.chef  <%= @domains.join(' ') %> <%= @domains.map {|d| "~^static\d.#{d}?$"}.join ' ' %> <%= @id %>.<%= node[:domain] %> <%= @id %>.<%= node[:fqdn] %>;
 
   gzip on;
 

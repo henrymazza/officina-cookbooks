@@ -20,6 +20,8 @@
 
 Chef::Log.info("Chef Handlers will be at: #{node['chef_handler']['handler_path']}")
 
+gem_package "pony"
+
 remote_directory node['chef_handler']['handler_path'] do
   source 'handlers'
   owner 'root'

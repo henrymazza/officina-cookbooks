@@ -69,7 +69,7 @@ service "mysql" do
     start_command "start mysql"
   end
   supports :status => true, :restart => true, :reload => true
-  action :nothing
+  action :enable
 end
 
 template "#{node['mysql']['conf_dir']}/my.cnf" do
@@ -117,7 +117,7 @@ rescue
 end
 
 execute "mysql-install-privileges" do
-  command "/usr/bin/mysql -u root #{node['mysql']['server_root_password'].empty? ? '' : '-p ' }#{node['mysql']['server_root_password']} < #{grants_path}"
+  command "/usr/bin/mysql -u root #{node['mysql']['server_root_password'].empty? ? '' : '-p' }#{node['mysql']['server_root_password']} < #{grants_path}"
   action :nothing
   subscribes :run, resources("template[#{grants_path}]"), :immediately
 end
