@@ -6,6 +6,7 @@ version           "0.99.0"
 
 recipe "nginx", "Installs nginx package and sets up configuration with Debian apache style with sites-enabled/sites-available"
 recipe "nginx::source", "Installs nginx from source and sets up configuration with Debian apache style with sites-enabled/sites-available"
+recipe "nginx::passenger", "Installs nginx with Phusion Passanger module."
 
 %w{ ubuntu debian centos redhat fedora }.each do |os|
   supports os

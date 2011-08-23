@@ -250,6 +250,7 @@
   "recipes": {
     "nginx": "Installs nginx package and sets up configuration with Debian apache style with sites-enabled/sites-available",
     "nginx::source": "Installs nginx from source and sets up configuration with Debian apache style with sites-enabled/sites-available"
+    "nginx::passenger": "Installs nginx from source with Phusion Passenger module."
   },
   "version": "0.99.0"
 }

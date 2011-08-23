@@ -7,4 +7,3 @@ version          "0.0.1"
 
 recipe           "application::rails", "Deploys a Rails application specified in a data bag with the deploy_revision resource"
 
-depends "nginx::passenger"

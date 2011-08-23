@@ -49,5 +49,5 @@ server {
 }
 <% end %>
 
-passenger_pre_start http://<%= @domains.first %>/;
-passenger_pre_start https://<%= @ssl_domains.first %>/;
+passenger_pre_start http://<%= @domains.first if @domains %>/;
+passenger_pre_start https://<%= @ssl_domains.first if @ssl_domains %>/;

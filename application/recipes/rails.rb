@@ -219,6 +219,10 @@ deploy_revision app['id'] do
     migrate false
   end
   before_symlink do
+    execute "/usr/local/rvm/bin/rvm #{app['rvm_ruby']} exec bundle exec rake assets:precompile RAILS_ENV=production" do
+      ignore_failure true
+      cwd release_path
+    end
     ruby_block "remove_run_migrations" do
       block do
         if node.role?("#{app['id']}_run_migrations")
@@ -228,6 +232,7 @@ deploy_revision app['id'] do
       end
     end
   end
+  execute "touch ${release_path}/tmp/restart.txt"
 end
 
 template "#{node[:nginx][:dir]}/sites-available/#{app['id']}" do
