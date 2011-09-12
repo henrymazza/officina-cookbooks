@@ -171,12 +171,14 @@ deploy_revision app['id'] do
   revision app['revision'][node.chef_environment]
   repository app['repository']
   user app['owner']
+  # user app['owner']
   group app['group']
   deploy_to app['deploy_to']
   environment 'RAILS_ENV' => rails_env
   action app['force'][node.chef_environment] ? :force_deploy : :deploy
   ssh_wrapper "#{app['deploy_to']}/deploy-ssh-wrapper" if app['deploy_key']
   shallow_clone true
+  notifies :restart, "service[nginx]", :delayed
   before_migrate do
     if app['gems'].has_key?('bundler')
       link "#{release_path}/vendor/bundle" do
@@ -219,9 +221,11 @@ deploy_revision app['id'] do
     migrate false
   end
   before_symlink do
+    # Nginx won't forward queries to assets to rails, need to precompile
     execute "/usr/local/rvm/bin/rvm #{app['rvm_ruby']} exec bundle exec rake assets:precompile RAILS_ENV=production" do
       ignore_failure true
       cwd release_path
+      notifies :restart, "service[nginx]", :delayed
     end
     ruby_block "remove_run_migrations" do
       block do
@@ -232,7 +236,6 @@ deploy_revision app['id'] do
       end
     end
   end
-  execute "touch ${release_path}/tmp/restart.txt"
 end
 
 template "#{node[:nginx][:dir]}/sites-available/#{app['id']}" do

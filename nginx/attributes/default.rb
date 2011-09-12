@@ -16,8 +16,8 @@ else
 end
 
 default[:nginx][:gzip] = "on"
-default[:nginx][:gzip_http_version] = "1.0"
-default[:nginx][:gzip_comp_level] = "2"
+default[:nginx][:gzip_http_version] = "1.1"
+default[:nginx][:gzip_comp_level] = "3"
 default[:nginx][:gzip_proxied] = "any"
 default[:nginx][:gzip_types] = [
   "text/plain",
@@ -37,5 +37,5 @@ default[:nginx][:worker_processes]   = cpu[:total]
 default[:nginx][:worker_connections] = 2048
 default[:nginx][:server_names_hash_bucket_size] = 64
 
-default[:nginx][:passenger_flags] = '--with-ipv6 --with-http_stub_status_module --with-http_ssl_module'
+default[:nginx][:passenger_flags] = '--with-ipv6 --with-http_stub_status_module --with-http_ssl_module --with-http_gzip_static_module --without-mail_pop3_module --without-mail_smtp_module --without-mail_imap_module'
 

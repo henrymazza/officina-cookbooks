@@ -1,19 +1,24 @@
 server {
   listen   80;
-  server_name <%= @id %>.officina.chef  <%= @domains.join(' ') %> <%= @domains.map {|d| "~^static\d.#{d}?$"}.join ' ' %> <%= @id %>.<%= node[:domain] %> <%= @id %>.<%= node[:fqdn] %>;
+  server_name <%= @id %>.officina.chef  <%= @domains.join(' ') %> <%= @domains.map {|d| "~^static\\d.#{d}$"}.join ' ' %> <%= @id %>.<%= node[:domain] %> <%= @id %>.<%= node[:fqdn] %>;
 
   gzip on;
 
-  location ~* \.(js|swf|css|png|je?pg)$ {
-    if ($query_string ~ "^[0-9]+$") {
-      expires max;
-      break;
-    }
+  location ~ ^/(assets|images|javascripts|stylesheets|swfs|system)/ {
+      gzip_static on;
+      expires     max;
+      add_header  Cache-Control public;
   }
-  location ~ ^/assets/ {
-    passenger_enabled on;
-    expires max;
+
+  location = /favicon.ico {
+    expires    max;
+    add_header Cache-Control public;
   }
+
+  location ~ \.php$ {
+          deny  all;
+  }
+
   root <%= @deploy_to %>/current/public;
   passenger_enabled on;
   passenger_min_instances 1;
@@ -49,5 +54,9 @@ server {
 }
 <% end %>
 
-passenger_pre_start http://<%= @domains.first if @domains %>/;
-passenger_pre_start https://<%= @ssl_domains.first if @ssl_domains %>/;
+<% if @domains %>
+  passenger_pre_start http://<%= @domains.first %>/;
+<% end %>
+<% if @ssl_domains %>
+  passenger_pre_start https://<%= @ssl_domains.first if @ssl_domains %>/;
+<% end %>

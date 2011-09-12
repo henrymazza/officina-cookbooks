@@ -79,7 +79,7 @@ end
 search(:apps) do |app|
   (app['database_master_role'] & node.run_list.roles).each do |dbm_role|
     app['databases'].each do |env,db|
-      if env =~ /#{node.chef_environment}/
+      if env =~ /#{node.chef_environment}/ && db['adapter'] =~ /mysql/
         root_pw = node['mysql']['server_root_password']
         mysql_database "create #{db['database']}" do
           host "localhost"
