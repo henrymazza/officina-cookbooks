@@ -99,7 +99,7 @@ log-queries-not-using-indexes
 # note: if you are setting up a replication slave, see README.Debian about
 #       other settings you may need to change.
 #server-id              = 1
-#log_bin                        = /var/log/mysql/mysql-bin.log
+log_bin                        = /var/log/mysql/mysql-bin.log
 expire_logs_days        = <%= node['mysql']['tunable']['expire_logs_days'] %>
 max_binlog_size         = <%= node['mysql']['tunable']['max_binlog_size'] %>
 #binlog_do_db           = include_database_name
