@@ -17,8 +17,22 @@
 # limitations under the License.
 #
 
-template "/tmp/chef-getting-started.txt" do
-  source "chef-getting-started.txt.erb"
-  mode "0644"
+require 'aws/s3'
+
+s3_file "/tmp/manto-system.tar.bz2" do
+  bucket "officina-mantostore"
+  object_name "20110815191152.backup_shared_system.tar.gz"
+  aws_access_key_id "AKIAIKLAZHM3GFTB7HSQ"
+  aws_secret_access_key "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"
+  mode "644"
+  not_if "test -e /tmp/manto-system.tar.bz2"
 end
 
+s3_file "/tmp/manto-mysql.tar.bz2" do
+  bucket "officina-mantostore"
+  object_name "20110815210721.mysql_backup_s3.sql.gz"
+  aws_access_key_id "AKIAIKLAZHM3GFTB7HSQ"
+  aws_secret_access_key "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"
+  mode "644"
+  not_if "test -e /tmp/manto-mysql.tar.bz2"
+end
